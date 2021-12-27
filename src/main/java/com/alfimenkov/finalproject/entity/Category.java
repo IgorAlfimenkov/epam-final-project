@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,12 +16,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "category")
+@NamedEntityGraph(
+        name = "category-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode(value = "tours")
+        }
+)
 public class Category {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -31,7 +38,13 @@ public class Category {
             joinColumns = {@JoinColumn(name="category_id")},
             inverseJoinColumns = {@JoinColumn(name="tour_id")}
     )
-     List<Tour> tours = new ArrayList<Tour>();
+    private List<Tour> tours = new ArrayList<Tour>();
 
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

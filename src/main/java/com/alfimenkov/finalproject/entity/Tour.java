@@ -15,6 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tour")
+@NamedEntityGraph(
+        name = "tour-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode(value = "categories")
+        }
+)
 public class Tour {
 
     @Id
@@ -41,4 +47,30 @@ public class Tour {
             inverseJoinColumns = {@JoinColumn(name="category_id")}
     )
     List<Category> categories = new ArrayList<Category>();
+
+
+
+    public String getCategoriesNames() {
+
+        String str = "";
+
+        for (Category c : categories  ) {
+            str += c.getName() + "\n";
+        }
+        return str;
+    }
+
+    @Override
+    public String toString() {
+
+
+        return "Tour{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ","  + getCategoriesNames() +
+                '}';
+    }
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +24,9 @@ public class Role {
     /*@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<User> users;*/
 
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {
