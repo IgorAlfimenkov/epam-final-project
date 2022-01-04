@@ -49,17 +49,6 @@ public class Tour {
     List<Category> categories = new ArrayList<Category>();
 
 
-
-    public String getCategoriesNames() {
-
-        String str = "";
-
-        for (Category c : categories  ) {
-            str += c.getName() + "\n";
-        }
-        return str;
-    }
-
     @Override
     public String toString() {
 
@@ -70,7 +59,6 @@ public class Tour {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
-                ","  + getCategoriesNames() +
                 '}';
     }
 }

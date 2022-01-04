@@ -42,11 +42,14 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "login")
+    private String login;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="role_id")
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
 
