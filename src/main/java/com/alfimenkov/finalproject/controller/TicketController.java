@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.controller;
 
+import com.alfimenkov.finalproject.dto.TicketDto;
 import com.alfimenkov.finalproject.entity.Ticket;
 import com.alfimenkov.finalproject.service.TicketServiceImpl;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,16 @@ public class TicketController {
     @GetMapping("/get/{id}")
     public String findById(@PathVariable long id, Model model) {
 
-        Ticket ticket = ticketService.findById(id);
+        TicketDto ticket = ticketService.findById(id);
+        model.addAttribute("ticket", ticket);
+
+        return "ticket.html";
+    }
+
+    @GetMapping("/{login}")
+    public String findByUserLogin(@PathVariable String login, Model model){
+
+        TicketDto ticket = ticketService.findByUserLogin(login);
         model.addAttribute("ticket", ticket);
 
         return "ticket.html";
