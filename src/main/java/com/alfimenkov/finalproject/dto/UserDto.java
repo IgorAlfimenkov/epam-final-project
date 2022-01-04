@@ -14,6 +14,9 @@ import java.util.Set;
 @ToString
 public class UserDto {
 
+    @JsonProperty(value = "id")
+    private Long id;
+
     @JsonProperty(value = "email")
     private String email;
 
@@ -23,8 +26,16 @@ public class UserDto {
     @JsonProperty(value = "surname")
     private String surname;
 
+    @JsonProperty(value = "password")
+    private String password;
+
+    @JsonProperty(value = "login")
+    private String login;
+
     @JsonProperty(value = "role")
     private RoleDto role;
+
+
 
     @JsonProperty(value = "tickets")
     private Set<UserTicketDto> tickets;
