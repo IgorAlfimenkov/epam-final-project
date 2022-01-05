@@ -1,37 +1,58 @@
 package com.alfimenkov.finalproject.controller;
 
+import com.alfimenkov.finalproject.dto.TourDto;
 import com.alfimenkov.finalproject.entity.Tour;
 import com.alfimenkov.finalproject.service.TourServiceImpl;
+import com.alfimenkov.finalproject.service.api.ITourService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/tour")
 public class TourController {
 
-    private final TourServiceImpl tourService;
+    private final ITourService tourService;
 
     @GetMapping("/all")
-    public String getAll(Model model) {
+    public ResponseEntity<Set<TourDto>> findAll(Model model) {
 
-        List<Tour> tours = tourService.getAllTours();
-        model.addAttribute("tours", tours);
-        return "allTours.html";
-
+       return ResponseEntity.ok(tourService.getAllTours());
     }
 
     @GetMapping("/get/{id}")
-    public String getTour(@PathVariable Long id, Model model) {
+    public ResponseEntity<TourDto> findTour(@PathVariable Long id, Model model) {
 
-        Tour tour = tourService.getTourById(id);
-        model.addAttribute("tour", tour);
-        return "tourPage.html";
+        return ResponseEntity.ok(tourService.getTourById(id));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<TourDto> createTour(@RequestBody TourDto tourDto) {
+
+        return ResponseEntity.ok(tourService.createTour(tourDto));
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<TourDto> updateTour(@RequestBody TourDto tourDto, @PathVariable Long id) {
+
+        return ResponseEntity.ok(tourService.updateTour(tourDto, id));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteTour(@PathVariable Long id) {
+
+        tourService.deleteTour(id);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Set<TourDto>> findToursByPrice(@RequestParam int price) {
+
+        return ResponseEntity.ok(tourService.findToursByPrice(price));
     }
 }

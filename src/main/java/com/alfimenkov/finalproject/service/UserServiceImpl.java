@@ -5,19 +5,18 @@ import com.alfimenkov.finalproject.entity.Role;
 import com.alfimenkov.finalproject.entity.User;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.IUserRepository;
+import com.alfimenkov.finalproject.service.api.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @AllArgsConstructor
-public class UserServiceImpl {
+public class UserServiceImpl implements IUserService {
 
     private final IUserRepository userRepository;
     private final IMapper<UserDto, User> userMapper;
@@ -25,7 +24,7 @@ public class UserServiceImpl {
     public UserDto createUser(UserDto userDto) {
 
         User user = userMapper.toEntity(userDto, User.class);
-        user.setRole(new Role(2,"User"));
+        user.setRole(new Role(2L,"User"));
         userRepository.save(user);
 
         return userMapper.toDto(user, UserDto.class);

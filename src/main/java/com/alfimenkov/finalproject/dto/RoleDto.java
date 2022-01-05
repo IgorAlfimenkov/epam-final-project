@@ -4,6 +4,8 @@ import lombok.*;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @JsonAutoDetect
@@ -12,6 +14,12 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @ToString
 public class RoleDto {
 
+    @JsonProperty(value = "id")
+    private Long id;
+
     @JsonProperty(value = "name")
     private String name;
+
+    @JsonProperty(value = "users")
+    private Set<RoleUserDto> users;
 }

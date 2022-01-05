@@ -3,6 +3,7 @@ package com.alfimenkov.finalproject.controller;
 import com.alfimenkov.finalproject.dto.UserDto;
 import com.alfimenkov.finalproject.entity.User;
 import com.alfimenkov.finalproject.service.UserServiceImpl;
+import com.alfimenkov.finalproject.service.api.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,48 +17,38 @@ import java.util.Set;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserServiceImpl userServiceImpl;
+    private final IUserService userServiceImpl;
 
     @GetMapping("/get/{id}")
-    public String getUser(@PathVariable long id, Model model){
+    public ResponseEntity<UserDto> getUser(@PathVariable long id){
 
-        UserDto user =  userServiceImpl.findUser(id);
-        model.addAttribute("user", user);
-        return "test.html";
+       return ResponseEntity.ok(userServiceImpl.findUser(id));
+
     }
 
     @PostMapping("/register")
-    public String createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
 
-        userServiceImpl.createUser(userDto);
-
-        return "test.html";
+        return ResponseEntity.ok(userServiceImpl.createUser(userDto));
     }
 
 
     @PutMapping("/edit/{id}")
-    public String updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
 
-        userServiceImpl.updateUser(userDto, id);
+        return ResponseEntity.ok(userServiceImpl.updateUser(userDto, id));
 
-        return "test.html";
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id) {
 
         userServiceImpl.deleteUser(id);
-
-        return "test.html";
     }
 
     @GetMapping("/all")
-    public String deleteUser(Model model) {
+    public ResponseEntity<Set<UserDto>> findAllUsers(Model model) {
 
-        Set<UserDto> users = userServiceImpl.findAllUsers();
-        model.addAttribute("users", users);
-
-        return "allUsers.html";
-
+        return ResponseEntity.ok(userServiceImpl.findAllUsers());
     }
 }

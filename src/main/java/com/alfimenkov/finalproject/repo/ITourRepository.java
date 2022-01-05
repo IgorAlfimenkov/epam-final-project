@@ -25,4 +25,6 @@ public interface ITourRepository extends JpaRepository<Tour, Long> {
     @EntityGraph(value = "tour-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
     List<Tour> findToursByPrice(double price);
 
+    void deleteById(Long id);
+
 }

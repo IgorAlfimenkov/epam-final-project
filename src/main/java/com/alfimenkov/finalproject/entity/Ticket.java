@@ -30,7 +30,7 @@ import java.sql.Timestamp;
             @NamedSubgraph(
                     name = "user-sub-graph",
                     attributeNodes = {
-                            @NamedAttributeNode("role")
+                            @NamedAttributeNode("roles")
                     }
             )
         }

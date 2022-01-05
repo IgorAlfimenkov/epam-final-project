@@ -15,7 +15,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @AllArgsConstructor
 public class CategoryTourDto {
 
-    @JsonProperty(value = "name")
-    private String name;
+    @JsonProperty(value = "id")
+    private Long id;
 
 }

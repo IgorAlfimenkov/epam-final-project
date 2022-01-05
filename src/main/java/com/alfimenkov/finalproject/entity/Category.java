@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.repository.EntityGraph;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,14 +25,14 @@ import java.util.List;
 public class Category {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "id", columnDefinition = "serial")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "tour_category",
             joinColumns = {@JoinColumn(name="category_id")},

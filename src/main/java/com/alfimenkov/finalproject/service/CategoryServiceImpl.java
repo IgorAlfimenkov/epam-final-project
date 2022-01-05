@@ -4,7 +4,9 @@ import com.alfimenkov.finalproject.dto.CategoryDto;
 import com.alfimenkov.finalproject.entity.Category;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ICategoryRepository;
+import com.alfimenkov.finalproject.service.api.ICategoryService;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +17,14 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @AllArgsConstructor
-public class CategoryServiceImpl {
+public class CategoryServiceImpl implements ICategoryService {
 
     private final ICategoryRepository categoryRepository;
     private final IMapper<CategoryDto, Category> categoryMapper;
 
-    public CategoryDto findById(Long id) {
+    public CategoryDto findCategoryById(Long id) {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+        Category category = categoryRepository.findCategoryById(id);
         return categoryMapper.toDto(category, CategoryDto.class);
     }
 
@@ -34,10 +35,33 @@ public class CategoryServiceImpl {
         return categoryMapper.toDto(category,CategoryDto.class);
     }
 
-    public Set<CategoryDto> findAll() {
+    public Set<CategoryDto> findAllCategories() {
 
         Set<Category> categories = new HashSet<>(categoryRepository.findAll());
 
         return categoryMapper.setToDto(categories, CategoryDto.class);
+    }
+
+    public CategoryDto addCategory(CategoryDto categoryDto) {
+
+        Category category = categoryMapper.toEntity(categoryDto, Category.class);
+        category.setId(null);
+        categoryRepository.save(category);
+
+        return categoryMapper.toDto(category,CategoryDto.class);
+    }
+
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+
+        Category category = categoryMapper.toEntity(categoryDto, Category.class);
+        category.setId(id);
+        categoryRepository.save(category);
+
+        return categoryMapper.toDto(category, CategoryDto.class);
+    }
+
+    public void deleteCategory(Long id) {
+
+        categoryRepository.deleteCategoryById(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.dto;
 
+
 import lombok.*;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,9 +11,11 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TourCategoryDto {
+public class UserRoleDto {
 
     @JsonProperty(value = "id")
-    private String id;
+    private Long id;
 
+    @JsonProperty(value = "name")
+    private String name;
 }

@@ -26,7 +26,7 @@ public class Tour {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -40,7 +40,7 @@ public class Tour {
     @Column(name = "ticket_quantity")
     private int quantity;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "tour_category",
             joinColumns = {@JoinColumn(name="tour_id")},

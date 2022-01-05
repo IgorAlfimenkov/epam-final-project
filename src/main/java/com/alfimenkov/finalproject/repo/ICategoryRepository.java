@@ -10,10 +10,12 @@ public interface ICategoryRepository extends JpaRepository<Category, Long> {
 
 
     @EntityGraph(value = "category-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
-    Category findById(long id);
+    Category findCategoryById(Long id);
 
     @EntityGraph(value = "category-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
     Category findByName(String name);
+
+    void deleteCategoryById(Long id);
 
 
 

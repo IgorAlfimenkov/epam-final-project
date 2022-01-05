@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ import java.util.List;
 @NamedEntityGraph(
         name = "user-entity-graph",
         attributeNodes = {
-                @NamedAttributeNode("role"),
+                @NamedAttributeNode("roles"),
                 @NamedAttributeNode("tickets")
 
         }
@@ -45,13 +46,22 @@ public class User {
     @Column(name = "login")
     private String login;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="role_id")
-    private Role role;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = {@JoinColumn(name="user_id")},
+            inverseJoinColumns = {@JoinColumn(name="role_id")}
+    )
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
+
+    public void setRole(Role role) {
+
+        this.getRoles().add(role);
+    }
 
     @Override
     public String toString() {
@@ -61,7 +71,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", role=" + role.getName() +
+                ", role=" + roles +
                 '}';
     }
 }

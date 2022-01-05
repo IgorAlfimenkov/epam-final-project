@@ -32,8 +32,8 @@ public class UserDto {
     @JsonProperty(value = "login")
     private String login;
 
-    @JsonProperty(value = "role")
-    private RoleDto role;
+    @JsonProperty(value = "roles")
+    private Set<UserRoleDto> roles;
 
 
 

@@ -26,4 +26,7 @@ public class TicketDto {
     @JsonProperty(value = "tour")
     private TicketTourDto tour;
 
+    @JsonProperty(value = "user")
+    private TicketUserDto user;
+
 }

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
+
 @Repository
 public interface ITicketRepository extends JpaRepository<Ticket, Long> {
 
@@ -15,6 +17,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Long> {
 
     @EntityGraph(value = "ticket-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select t from Ticket t where t.user.login = ?1")
-    Ticket findByUserLogin(String login);
+    Set<Ticket> findAllByUserLogin(String login);
 
+    void deleteTicketById(Long id);
 }

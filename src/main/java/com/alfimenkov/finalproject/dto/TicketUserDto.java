@@ -13,9 +13,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @ToString
 public class TicketUserDto {
 
-    @JsonProperty(value = "name")
-    private String name;
+    @JsonProperty(value = "id")
+    private Long id;
 
-    @JsonProperty(value = "surname")
-    private String surname;
 }

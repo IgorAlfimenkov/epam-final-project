@@ -1,52 +1,59 @@
 package com.alfimenkov.finalproject.controller;
 
 import com.alfimenkov.finalproject.dto.CategoryDto;
-import com.alfimenkov.finalproject.entity.Category;
-import com.alfimenkov.finalproject.mapper.IMapper;
-import com.alfimenkov.finalproject.service.CategoryServiceImpl;
+import com.alfimenkov.finalproject.service.api.ICategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/category")
 public class CategoryController {
 
-    private final CategoryServiceImpl categoryService;
+    private final ICategoryService categoryService;
 
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<CategoryDto> findById(@PathVariable("id") Long id) {
 
-        CategoryDto category = categoryService.findById(id);
-        model.addAttribute("category", category);
+        return ResponseEntity.ok(categoryService.findCategoryById(id));
 
-        return "category.html";
     }
 
     @GetMapping("/")
-    public String findByName(@RequestParam String name, Model model) {
+    public ResponseEntity<CategoryDto> findByName(@RequestParam String name) {
 
-        CategoryDto category = categoryService.findByName(name);
-        model.addAttribute("category", category);
+        return ResponseEntity.ok(categoryService.findByName(name));
 
-        return "category.html";
     }
 
     @GetMapping("/all")
-    public String findAll(Model model) {
+    public ResponseEntity<Set<CategoryDto>> findAll(Model model) {
 
-        Set<CategoryDto> allCategories = categoryService.findAll();
-        model.addAttribute("allCategories", allCategories);
-
-        return "allCategories.html";
+        return ResponseEntity.ok(categoryService.findAllCategories());
     }
 
+    @PostMapping("/add")
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto category) {
 
+        return ResponseEntity.ok(categoryService.addCategory(category));
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Long id) {
+
+        return ResponseEntity.ok(categoryService.updateCategory(id, categoryDto));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+
+        categoryService.deleteCategory(id);
+    }
 
 
 }
