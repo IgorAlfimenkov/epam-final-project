@@ -10,6 +10,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -48,13 +50,18 @@ public class TicketController {
 
 
 
-    @PostMapping("/add/{id}")
-    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto,
-                                                  @PathVariable(name = "id") Long userId)  {
+    @PostMapping("/add")
+    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto)  {
 
         tourService.decrementTourQuantity(ticketDto.getTour().getId());
 
-        return ResponseEntity.ok( ticketService.createTicket(ticketDto, userId));
+        return ResponseEntity.ok( ticketService.createTicket(ticketDto));
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<TicketDto>> orderTickets(@RequestParam Optional<String> sortBy) {
+
+        return  ResponseEntity.ok(ticketService.orderTickets(sortBy));
     }
 
 

@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.controller;
 
+import com.alfimenkov.finalproject.dto.UpdateUserDto;
 import com.alfimenkov.finalproject.dto.UserDto;
 import com.alfimenkov.finalproject.service.api.IUserService;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class UserController {
 
     @Secured("ROLE_ADMIN")
     @PutMapping("/edit/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto userDto) {
 
         return ResponseEntity.ok(userServiceImpl.updateUser(userDto, id));
 

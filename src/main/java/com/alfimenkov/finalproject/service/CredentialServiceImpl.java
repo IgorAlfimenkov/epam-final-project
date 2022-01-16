@@ -1,9 +1,6 @@
 package com.alfimenkov.finalproject.service;
 
-import com.alfimenkov.finalproject.dto.CredentialDto;
-import com.alfimenkov.finalproject.dto.RegisterUserDto;
-import com.alfimenkov.finalproject.dto.UpdatePasswordDto;
-import com.alfimenkov.finalproject.dto.UpdateUsernameDto;
+import com.alfimenkov.finalproject.dto.*;
 import com.alfimenkov.finalproject.entity.Credential;
 import com.alfimenkov.finalproject.entity.Role;
 import com.alfimenkov.finalproject.entity.User;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -92,6 +90,22 @@ public class CredentialServiceImpl implements ICredentialService {
 
         Credential currentCredential = credentialRepository.getById(credId);
         currentCredential.setUsername(usernameDto.getUsername());
+        credentialRepository.save(currentCredential);
+
+        return credentialMapper.toDto(currentCredential, CredentialDto.class);
+    }
+
+    @Override
+    public CredentialDto updateCredentialRoles(Long credId, RoleDto roleName) {
+
+        Credential currentCredential = credentialRepository.getById(credId);
+        Role role = roleRepository.findRoleByName(roleName.getName());
+
+        if(Objects.nonNull(role))
+        {
+            if(!currentCredential.getRoles().contains(role)) currentCredential.addRole(role);
+        }
+
         credentialRepository.save(currentCredential);
 
         return credentialMapper.toDto(currentCredential, CredentialDto.class);

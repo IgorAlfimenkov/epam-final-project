@@ -10,11 +10,14 @@ import com.alfimenkov.finalproject.repo.ITourRepository;
 import com.alfimenkov.finalproject.repo.IUserRepository;
 import com.alfimenkov.finalproject.service.api.ITicketService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -47,10 +50,10 @@ public class TicketServiceImpl implements ITicketService {
         return ticketMapper.setToDto(tickets, TicketDto.class);
     }
 
-    public TicketDto createTicket(TicketDto ticketDto, Long id) {
+    public TicketDto createTicket(TicketDto ticketDto) {
 
 
-        User user = userRepository.findUserById(id);
+        User user = userRepository.findUserById(ticketDto.getUser().getId());
         Ticket ticket = ticketMapper.toEntity(ticketDto, Ticket.class);
 
         ticket.setId(null);
@@ -74,6 +77,13 @@ public class TicketServiceImpl implements ITicketService {
         ticketRepository.save(ticket);
 
         return ticketMapper.toDto(ticket, TicketDto.class);
+    }
+
+    @Override
+    public List<TicketDto> orderTickets(Optional<String> sortBy) {
+        List<Ticket> tickets = ticketRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy.orElse("id")));
+
+        return ticketMapper.listToDto(tickets, TicketDto.class);
     }
 
     public void deleteTicketById(Long id) {

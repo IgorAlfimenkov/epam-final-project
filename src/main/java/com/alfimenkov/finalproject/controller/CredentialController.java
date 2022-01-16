@@ -1,9 +1,7 @@
 package com.alfimenkov.finalproject.controller;
 
-import com.alfimenkov.finalproject.dto.CredentialDto;
+import com.alfimenkov.finalproject.dto.*;
 
-import com.alfimenkov.finalproject.dto.UpdatePasswordDto;
-import com.alfimenkov.finalproject.dto.UpdateUsernameDto;
 import com.alfimenkov.finalproject.service.api.ICredentialService;
 import com.alfimenkov.finalproject.service.api.ISecurityExpressions;
 import lombok.AllArgsConstructor;
@@ -46,10 +44,17 @@ public class CredentialController {
         return ResponseEntity.ok(credentialService.updateCredential(credentialDto, credId));
     }
 
-    @DeleteMapping ("delete/{credId}")
+    @DeleteMapping ("/delete/{credId}")
     public void deleteCredential(@PathVariable Long credId) {
 
         credentialService.deleteCredential(credId);
     }
+
+    @PutMapping("/update-role/{credId}")
+    public ResponseEntity<CredentialDto> updateCredentialRoles (@PathVariable Long credId,@RequestBody RoleDto roleName) {
+
+        return ResponseEntity.ok(credentialService.updateCredentialRoles(credId, roleName));
+    }
+
 
 }

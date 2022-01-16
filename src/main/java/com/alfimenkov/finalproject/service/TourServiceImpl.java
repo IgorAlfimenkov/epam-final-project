@@ -1,19 +1,20 @@
 package com.alfimenkov.finalproject.service;
 
-import com.alfimenkov.finalproject.dto.TourDto;
+import com.alfimenkov.finalproject.dto.*;
 import com.alfimenkov.finalproject.entity.Tour;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ITourRepository;
 import com.alfimenkov.finalproject.service.api.ITourService;
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,6 +24,9 @@ public class TourServiceImpl implements ITourService {
 
     private final ITourRepository tourRepository;
     private final IMapper<TourDto, Tour> tourMapper;
+    private final IMapper<UserPriceTourDto, Tour> tourMapper2;
+    private final IMapper<VipPriceTourDto, Tour> tourMapper3;
+
 
     public TourDto getTourById(Long id) {
 
@@ -32,11 +36,14 @@ public class TourServiceImpl implements ITourService {
         return tourDto;
     }
 
-    public Set<TourDto> getAllTours() {
-
+    public Set<? extends TourDto> getAllTours(RequestRoleDto requestRoleDto) {
 
         Set<Tour> tours = new HashSet<>(tourRepository.findAll());
-        Set<TourDto> toursDto = tourMapper.setToDto(tours, TourDto.class);
+        Set<? extends TourDto> toursDto;
+        if(requestRoleDto.isVip()){
+            toursDto  = tourMapper3.setToDto(tours, VipPriceTourDto.class);
+        } else
+         toursDto = tourMapper2.setToDto(tours, UserPriceTourDto.class);
         return toursDto;
     }
 
@@ -75,5 +82,14 @@ public class TourServiceImpl implements ITourService {
         tour.setQuantity(tour.getQuantity()-1);
 
         tourRepository.save(tour);
+    }
+
+
+
+    public List<TourDto> findToursOrderedByPrice(Optional<String> sortBy) {
+
+        List<Tour> tours = tourRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy.orElse("price")));
+
+        return  tourMapper.listToDto(tours, TourDto.class);
     }
 }

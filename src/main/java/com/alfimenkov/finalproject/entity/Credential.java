@@ -47,4 +47,9 @@ public class Credential {
             cascade = CascadeType.ALL)
     private User user;
 
+    public void addRole(Role role) {
+
+        this.getRoles().add(role);
+    }
+
 }

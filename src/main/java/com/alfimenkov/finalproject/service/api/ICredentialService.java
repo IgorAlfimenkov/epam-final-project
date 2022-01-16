@@ -1,9 +1,7 @@
 package com.alfimenkov.finalproject.service.api;
 
-import com.alfimenkov.finalproject.dto.CredentialDto;
-import com.alfimenkov.finalproject.dto.RegisterUserDto;
-import com.alfimenkov.finalproject.dto.UpdatePasswordDto;
-import com.alfimenkov.finalproject.dto.UpdateUsernameDto;
+import com.alfimenkov.finalproject.dto.*;
+
 
 public interface ICredentialService {
 
@@ -14,4 +12,5 @@ public interface ICredentialService {
     CredentialDto findCredentialByUsername(String username);
     CredentialDto updateCredentialPassword(Long credId, UpdatePasswordDto updatePasswordDto);
     CredentialDto updateCredentialUsername(Long credId, UpdateUsernameDto updateUsernameDto);
+    CredentialDto updateCredentialRoles(Long credId, RoleDto roleName);
 }

@@ -44,7 +44,7 @@ public class User {
     private String surname;
 
     @OneToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.MERGE)
+            cascade = CascadeType.ALL)
     @JoinColumn(name = "creds_id")
     private Credential credential;
 

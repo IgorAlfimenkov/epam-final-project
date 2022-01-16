@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.service;
 
+import com.alfimenkov.finalproject.dto.UpdateUserDto;
 import com.alfimenkov.finalproject.dto.UserDto;
 import com.alfimenkov.finalproject.entity.Role;
 import com.alfimenkov.finalproject.entity.User;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,10 +31,11 @@ public class UserServiceImpl implements IUserService {
         return userMapper.toDto(user, UserDto.class);
     }
 
-    public UserDto updateUser(UserDto userDto, Long id) {
+    public UserDto updateUser(UpdateUserDto updateUserDto, Long id) {
 
-        userDto.setId(id);
-        User user = userMapper.toEntity(userDto, User.class);
+
+        User user = userRepository.findUserById(id);
+        user.setEmail(updateUserDto.getEmail()).setSurname(updateUserDto.getSurname()).setName(updateUserDto.getName());
         userRepository.save(user);
 
         return userMapper.toDto(user, UserDto.class);
@@ -51,7 +54,7 @@ public class UserServiceImpl implements IUserService {
 
     public Set<UserDto> findAllUsers() {
 
-        Set<User> users =  userRepository.findAll().stream().collect(Collectors.toSet());
+        Set<User> users = new HashSet<>(userRepository.findAll());
 
         return userMapper.setToDto(users, UserDto.class);
     }

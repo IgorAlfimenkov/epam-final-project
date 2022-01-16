@@ -1,6 +1,7 @@
 package com.alfimenkov.finalproject.service;
 
 
+import com.alfimenkov.finalproject.dto.RequestRoleDto;
 import com.alfimenkov.finalproject.repo.ICredentialRepository;
 import com.alfimenkov.finalproject.repo.ITicketRepository;
 import com.alfimenkov.finalproject.service.api.ICredentialService;
@@ -20,9 +21,17 @@ public class SecurityExpressions implements ISecurityExpressions {
     private final ITicketRepository ticketRepository;
     private final ICredentialRepository credentialRepository;
 
-    private Boolean isAdmin(@NotNull Authentication authentication) {
+    public boolean isAdmin(@NotNull Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+
+    public boolean isVip(RequestRoleDto requestRoleDto, @NotNull Authentication authentication) {
+        boolean isVip = authentication.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_VIP"));
+        if(isVip) requestRoleDto.setVip(true);
+        return true;
     }
 
     @Override
@@ -41,7 +50,7 @@ public class SecurityExpressions implements ISecurityExpressions {
     @Override
     public boolean isCredentialOwnedByUser(Long credentialId, Authentication authentication) {
 
-       /* if(isAdmin(authentication)) return true;*/
+        if(isAdmin(authentication)) return true;
 
         String ownerUsername = credentialRepository.getById(credentialId).getUsername();
 

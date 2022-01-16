@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -18,7 +19,8 @@ import java.util.List;
 @NamedEntityGraph(
         name = "tour-entity-graph",
         attributeNodes = {
-                @NamedAttributeNode(value = "categories")
+                @NamedAttributeNode(value = "categories"),
+                @NamedAttributeNode(value = "price")
         }
 )
 public class Tour {
@@ -34,11 +36,8 @@ public class Tour {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
-    private double price;
-
     @Column(name = "ticket_quantity")
-    private int quantity;
+    private Integer quantity;
 
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
@@ -48,6 +47,20 @@ public class Tour {
     )
     List<Category> categories = new ArrayList<Category>();
 
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "price_id")
+    private Price price;
+
+
+
+
+    @Override
+    public boolean equals(Object o) {
+
+        Tour tour = (Tour) o;
+        return id == tour.getId();
+    }
 
     @Override
     public String toString() {
@@ -57,7 +70,6 @@ public class Tour {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", price=" + price +
                 ", quantity=" + quantity +
                 '}';
     }

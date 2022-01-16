@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,6 +41,14 @@ public class Mapper<Dto, Entity> implements IMapper<Dto, Entity> {
         return setOfDto.stream()
                 .map((dto) -> (Entity) mapper.map(dto, entity))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Dto> listToDto(List<Entity> listOfEntities, Class<?> dto) {
+        return listOfEntities.stream()
+                .map(entity -> (Dto) mapper.map(entity, dto))
+                .collect(Collectors.toList());
     }
 
 }
