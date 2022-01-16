@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface IRoleRepository extends JpaRepository<Role,Long> {
 
     Role findRoleById(Long id);
-
+    Role findRoleByName(String name);
     void deleteRoleById(Long id);
 
 }

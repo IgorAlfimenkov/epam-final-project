@@ -12,4 +12,5 @@ public interface ITourService {
     TourDto updateTour(TourDto tourDto, Long id);
     void deleteTour(Long id);
     Set<TourDto> findToursByPrice(int price);
+    void decrementTourQuantity(Long id);
 }

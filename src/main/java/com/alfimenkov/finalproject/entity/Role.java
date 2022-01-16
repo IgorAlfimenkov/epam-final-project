@@ -14,13 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "roles")
-@NamedEntityGraph(
-        name = "role-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode(value = "users")
-
-        }
-)
 public class Role {
 
     @Id
@@ -33,9 +26,13 @@ public class Role {
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name="role_id")},
-            inverseJoinColumns = {@JoinColumn(name="user_id")}
+            inverseJoinColumns = {@JoinColumn(name="cred_id")}
     )
-    private Set<User> users;
+    private Set<Credential> creds;
+
+    @ManyToMany(mappedBy = "roles",
+            fetch = FetchType.LAZY)
+    private Set<Credential> credentials;
 
     public Role(Long id, String name) {
 

@@ -2,8 +2,12 @@ package com.alfimenkov.finalproject.service;
 
 import com.alfimenkov.finalproject.dto.TicketDto;
 import com.alfimenkov.finalproject.entity.Ticket;
+import com.alfimenkov.finalproject.entity.Tour;
+import com.alfimenkov.finalproject.entity.User;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ITicketRepository;
+import com.alfimenkov.finalproject.repo.ITourRepository;
+import com.alfimenkov.finalproject.repo.IUserRepository;
 import com.alfimenkov.finalproject.service.api.ITicketService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.Set;
 public class TicketServiceImpl implements ITicketService {
 
     private final ITicketRepository ticketRepository;
+    private final IUserRepository userRepository;
     private final IMapper<TicketDto, Ticket> ticketMapper;
 
     public TicketDto findTicketById(long id){
@@ -28,9 +33,9 @@ public class TicketServiceImpl implements ITicketService {
         return ticketMapper.toDto(ticket, TicketDto.class);
     }
 
-    public Set<TicketDto> findAllByUserLogin(String login) {
+    public Set<TicketDto> findAllByUserUsername(String username) {
 
-        Set<Ticket> userTickets = ticketRepository.findAllByUserLogin(login);
+        Set<Ticket> userTickets = ticketRepository.findAllByUserUsername(username);
 
         return ticketMapper.setToDto(userTickets, TicketDto.class);
     }
@@ -42,12 +47,19 @@ public class TicketServiceImpl implements ITicketService {
         return ticketMapper.setToDto(tickets, TicketDto.class);
     }
 
-    public TicketDto createTicket(TicketDto ticketDto) {
+    public TicketDto createTicket(TicketDto ticketDto, Long id) {
 
+
+        User user = userRepository.findUserById(id);
         Ticket ticket = ticketMapper.toEntity(ticketDto, Ticket.class);
+
         ticket.setId(null);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ticket.setDate(timestamp);
+        user.getTickets().add(ticket);
+        ticket.setUser(user);
+
+        userRepository.save(user);
         ticketRepository.save(ticket);
 
         return ticketMapper.toDto(ticket, TicketDto.class);

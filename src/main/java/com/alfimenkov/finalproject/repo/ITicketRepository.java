@@ -16,8 +16,8 @@ public interface ITicketRepository extends JpaRepository<Ticket, Long> {
     Ticket findById(long id);
 
     @EntityGraph(value = "ticket-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
-    @Query("select t from Ticket t where t.user.login = ?1")
-    Set<Ticket> findAllByUserLogin(String login);
+    @Query("select t from Ticket t where t.user.credential.username = ?1")
+    Set<Ticket> findAllByUserUsername(String login);
 
     void deleteTicketById(Long id);
 }

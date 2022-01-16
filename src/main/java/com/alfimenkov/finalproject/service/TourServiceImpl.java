@@ -68,4 +68,12 @@ public class TourServiceImpl implements ITourService {
         Set<Tour> tours = new HashSet<>(tourRepository.findToursByPrice(price));
         return new HashSet<>(tourMapper.setToDto(tours, TourDto.class));
     }
+
+    public void decrementTourQuantity(Long id) {
+
+        Tour tour = tourRepository.findTourById(id);
+        tour.setQuantity(tour.getQuantity()-1);
+
+        tourRepository.save(tour);
+    }
 }

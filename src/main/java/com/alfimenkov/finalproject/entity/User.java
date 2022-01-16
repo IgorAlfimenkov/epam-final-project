@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
+
 
 @Getter
 @Setter
@@ -16,10 +17,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Accessors(chain = true)
 @NamedEntityGraph(
         name = "user-entity-graph",
         attributeNodes = {
-                @NamedAttributeNode("roles"),
+                @NamedAttributeNode("credential"),
                 @NamedAttributeNode("tickets")
 
         }
@@ -34,8 +36,6 @@ public class User {
     @Column(name= "email")
     private String email;
 
-    @Column(name = "password")
-    private String password;
 
     @Column(name = "name")
     private String name;
@@ -43,35 +43,22 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "login")
-    private String login;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinTable(
-            name = "user_role",
-            joinColumns = {@JoinColumn(name="user_id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id")}
-    )
-    private Set<Role> roles;
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE)
+    @JoinColumn(name = "creds_id")
+    private Credential credential;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
 
-    public void setRole(Role role) {
-
-        this.getRoles().add(role);
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", role=" + roles +
                 '}';
     }
 }

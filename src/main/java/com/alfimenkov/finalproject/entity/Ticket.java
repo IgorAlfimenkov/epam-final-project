@@ -18,7 +18,7 @@ import java.sql.Timestamp;
     name = "ticket-entity-graph",
     attributeNodes = {
             @NamedAttributeNode(value = "tour", subgraph = "tour-sub-graph"),
-            @NamedAttributeNode(value = "user", subgraph = "user-sub-graph")
+            @NamedAttributeNode(value = "user")
     },
         subgraphs ={
             @NamedSubgraph(
@@ -26,12 +26,6 @@ import java.sql.Timestamp;
                     attributeNodes = {
                             @NamedAttributeNode("categories")
                 }
-            ),
-            @NamedSubgraph(
-                    name = "user-sub-graph",
-                    attributeNodes = {
-                            @NamedAttributeNode("roles")
-                    }
             )
         }
 )

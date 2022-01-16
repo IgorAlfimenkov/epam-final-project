@@ -4,6 +4,7 @@ import com.alfimenkov.finalproject.dto.RoleDto;
 import com.alfimenkov.finalproject.service.api.IRoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/role")
+@Secured("ROLE_ADMIN")
 public class RoleController {
 
     private final IRoleService roleService;

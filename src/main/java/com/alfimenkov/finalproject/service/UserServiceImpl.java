@@ -24,7 +24,6 @@ public class UserServiceImpl implements IUserService {
     public UserDto createUser(UserDto userDto) {
 
         User user = userMapper.toEntity(userDto, User.class);
-        user.setRole(new Role(2L,"User"));
         userRepository.save(user);
 
         return userMapper.toDto(user, UserDto.class);

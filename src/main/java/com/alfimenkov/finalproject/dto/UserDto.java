@@ -26,16 +26,8 @@ public class UserDto {
     @JsonProperty(value = "surname")
     private String surname;
 
-    @JsonProperty(value = "password")
-    private String password;
-
-    @JsonProperty(value = "login")
-    private String login;
-
-    @JsonProperty(value = "roles")
-    private Set<UserRoleDto> roles;
-
-
+    @JsonProperty(value = "credential")
+    private CredentialDto credential;
 
     @JsonProperty(value = "tickets")
     private Set<UserTicketDto> tickets;
