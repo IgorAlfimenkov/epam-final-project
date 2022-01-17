@@ -1,9 +1,12 @@
 package com.alfimenkov.finalproject.config;
 
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -15,14 +18,29 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.alfimenkov.finalproject.repo")
-@PropertySource("classpath:application.properties")
+@PropertySource(value = {"classpath:application.properties"})
 public class JpaConfig {
+
+    @Value("${password}")
+    private String password;
+
+    @Value("${username}")
+    private String login;
+
+    @Value("${driver}")
+    private String driver;
+
+    @Value("${url}")
+    private String url;
+
+
+
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -41,10 +59,10 @@ public class JpaConfig {
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/touragency");
-        dataSource.setUsername( "postgres" );
+        dataSource.setUsername("postgres");
         dataSource.setPassword( "postgres" );
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/touragency");
+        dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;
     }
 
@@ -61,7 +79,7 @@ public class JpaConfig {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    Properties additionalProperties() {
+    private Properties additionalProperties() {
         Properties properties = new Properties();
 
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");

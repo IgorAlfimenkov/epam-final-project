@@ -19,12 +19,30 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @Column(name = "name")
     private String name;
-    /*@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private Set<User> users;*/
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = {@JoinColumn(name="role_id")},
+            inverseJoinColumns = {@JoinColumn(name="cred_id")}
+    )
+    private Set<Credential> creds;
 
+    @ManyToMany(mappedBy = "roles",
+            fetch = FetchType.LAZY)
+    private Set<Credential> credentials;
+
+    public Role(Long id, String name) {
+
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {

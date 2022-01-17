@@ -14,12 +14,27 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ticket")
+@NamedEntityGraph(
+    name = "ticket-entity-graph",
+    attributeNodes = {
+            @NamedAttributeNode(value = "tour", subgraph = "tour-sub-graph"),
+            @NamedAttributeNode(value = "user")
+    },
+        subgraphs ={
+            @NamedSubgraph(
+                    name = "tour-sub-graph",
+                    attributeNodes = {
+                            @NamedAttributeNode("categories")
+                }
+            )
+        }
+)
 public class Ticket {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "customer_name")
     private String customerName;
@@ -38,4 +53,16 @@ public class Ticket {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", customerName='" + customerName + '\'' +
+                ", customerSurname='" + customerSurname + '\'' +
+                ", date=" + date +
+                ", tour=" + tour.getName() +
+                ", user=" + user.getName() +
+                '}';
+    }
 }
