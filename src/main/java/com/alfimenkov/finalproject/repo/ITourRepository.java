@@ -25,10 +25,12 @@ public interface ITourRepository extends JpaRepository<Tour, Long> {
     Tour findTourByName(String name);
 
     @EntityGraph(value = "tour-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
-    List<Tour> findAllByOrderByPriceAsc();
+    @Query("select t from Tour t order by t.price.basic_price")
+    List<Tour> orderToursByPrice();
 
 
     @EntityGraph(value = "tour-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("select t from Tour t where t.price.basic_price = ?1")
     List<Tour> findToursByPrice(double price);
 
     void deleteById(Long id);

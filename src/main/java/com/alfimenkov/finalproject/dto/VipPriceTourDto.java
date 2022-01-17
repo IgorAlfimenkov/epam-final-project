@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class VipPriceTourDto extends TourDto {
+public class VipPriceTourDto extends AbstractTourDto {
 
     @JsonProperty(value = "name")
     private String name;

@@ -17,6 +17,9 @@ public  class PriceDto {
     @JsonProperty(value = "id")
     private Long id;
 
-   /* @JsonProperty(value = "basic_price")
-    private Double price;*/
+    @JsonProperty(value = "basic_price")
+    private Double basic_price;
+
+    @JsonProperty(value = "vip_price")
+    private Double vip_price;
 }

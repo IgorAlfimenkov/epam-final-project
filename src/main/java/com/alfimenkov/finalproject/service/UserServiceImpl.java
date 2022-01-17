@@ -33,7 +33,6 @@ public class UserServiceImpl implements IUserService {
 
     public UserDto updateUser(UpdateUserDto updateUserDto, Long id) {
 
-
         User user = userRepository.findUserById(id);
         user.setEmail(updateUserDto.getEmail()).setSurname(updateUserDto.getSurname()).setName(updateUserDto.getName());
         userRepository.save(user);

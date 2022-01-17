@@ -11,7 +11,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class VipPriceDto extends PriceDto{
+public class VipPriceDto {
 
     @JsonProperty(value = "id")
     private Long id;

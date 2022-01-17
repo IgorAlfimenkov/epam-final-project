@@ -1,8 +1,8 @@
 package com.alfimenkov.finalproject.controller;
 
 import com.alfimenkov.finalproject.dto.RequestRoleDto;
+import com.alfimenkov.finalproject.dto.AbstractTourDto;
 import com.alfimenkov.finalproject.dto.TourDto;
-import com.alfimenkov.finalproject.service.SecurityExpressions;
 import com.alfimenkov.finalproject.service.api.ISecurityExpressions;
 import com.alfimenkov.finalproject.service.api.ITourService;
 import lombok.AllArgsConstructor;
@@ -27,16 +27,17 @@ public class TourController {
 
     @GetMapping("/all")
     @PreAuthorize("@securityExpressions.isVip(#requestRoleDto, authentication)")
-    public ResponseEntity<Set<? extends TourDto>> findAll(@RequestBody RequestRoleDto requestRoleDto) {
+    public ResponseEntity<Set<? extends AbstractTourDto>> findAll(@RequestBody RequestRoleDto requestRoleDto) {
 
        return ResponseEntity.ok(tourService.getAllTours(requestRoleDto));
     }
 
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<TourDto> findTour(@PathVariable Long id) {
+    @PreAuthorize("@securityExpressions.isVip(#requestRoleDto, authentication)")
+    public ResponseEntity<AbstractTourDto> findTour(@PathVariable Long id, @RequestBody RequestRoleDto requestRoleDto) {
 
-        return ResponseEntity.ok(tourService.getTourById(id));
+        return ResponseEntity.ok(tourService.getTourById(id,requestRoleDto));
     }
 
     @Secured("ROLE_ADMIN")
@@ -62,14 +63,28 @@ public class TourController {
 
 
     @GetMapping("/")
-    public ResponseEntity<Set<TourDto>> findToursByPrice(@RequestParam int price) {
+    @PreAuthorize("@securityExpressions.isVip(#requestRoleDto, authentication)")
+    public ResponseEntity<Set<? extends AbstractTourDto>> findToursByPrice(@RequestParam int price,
+                                                                           @RequestBody RequestRoleDto requestRoleDto) {
 
-        return ResponseEntity.ok(tourService.findToursByPrice(price));
+        return ResponseEntity.ok(tourService.findToursByPrice(price, requestRoleDto));
     }
 
     @GetMapping("/order")
-    public ResponseEntity<List<TourDto>> findTourOrderedByPrice(@RequestParam Optional<String> sortBy) {
+    @PreAuthorize("@securityExpressions.isVip(#requestRoleDto, authentication)")
+    public ResponseEntity<List<? extends AbstractTourDto>> findTourOrderedByPrice(@RequestParam Optional<String> sortBy,
+                                                                                  @RequestBody RequestRoleDto
+                                                                                          requestRoleDto) {
 
-        return ResponseEntity.ok(tourService.findToursOrderedByPrice(sortBy));
+        return ResponseEntity.ok(tourService.findToursOrderedByPrice(sortBy, requestRoleDto));
     }
+
+    @GetMapping("/order-price")
+    @PreAuthorize("@securityExpressions.isVip(#requestRoleDto, authentication)")
+    public ResponseEntity<List<? extends AbstractTourDto>> orderToursByPrice(@RequestBody RequestRoleDto
+                                                                                          requestRoleDto) {
+
+        return ResponseEntity.ok(tourService.orderToursByPrice(requestRoleDto));
+    }
+
 }
