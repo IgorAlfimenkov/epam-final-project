@@ -41,6 +41,9 @@ public class Tour {
     @Column(name = "ticket_quantity")
     private Integer quantity;
 
+    @Column(name = "isHot")
+    private Boolean isHot;
+
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(
             name = "tour_category",

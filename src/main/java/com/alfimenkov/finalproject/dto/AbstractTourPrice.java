@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.dto;
 
+
 import lombok.*;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,8 +11,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SortTypeDto {
+public abstract class AbstractTourPrice {
 
-    @JsonProperty(value = "type")
-    private String type;
+    @JsonProperty(value = "price")
+    private double price;
 }

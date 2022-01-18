@@ -30,8 +30,7 @@ public class Price {
     @Column(name = "vip_price")
     private Double vip_price;
 
-    /*@OneToOne(mappedBy = "price", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private Tour tour;*/
+    @Column(name = "hot_price")
+    private Double hot_price;
 
 }

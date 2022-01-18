@@ -32,6 +32,7 @@ public class TourRepoTest {
                 .setName("Test name")
                 .setDescription("Desc")
                 .setQuantity(2)
+                .setIsHot(true)
                 .setCategories(null)
                 .setPrice(null);
     }

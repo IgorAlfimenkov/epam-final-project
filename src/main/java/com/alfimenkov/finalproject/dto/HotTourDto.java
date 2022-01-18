@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class TourDto{
+public class HotTourDto extends AbstractTourDto {
 
     @JsonProperty(value = "name")
     private String name;
@@ -20,14 +20,11 @@ public class TourDto{
     @JsonProperty(value = "description")
     private String description;
 
-    @JsonProperty(value = "price")
-    private PriceDto price;
+    @JsonProperty (value = "price")
+    private HotPriceDto price;
 
     @JsonProperty(value = "quantity")
     private int quantity;
-
-    @JsonProperty(value = "isHot")
-    private boolean isHot;
 
     @JsonProperty(value = "categories")
     private Set<TourCategoryDto> categories;
