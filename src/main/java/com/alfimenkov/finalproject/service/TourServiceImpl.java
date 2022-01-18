@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +28,7 @@ public class TourServiceImpl implements ITourService {
 
         AbstractTourDto tourDto;
         Tour tour  = tourRepository.findTourById(id);
+
         if(requestRoleDto.isVip()){
             tourDto = tourIMapper.toDto(tour, VipPriceTourDto.class);
         } else
@@ -39,10 +41,16 @@ public class TourServiceImpl implements ITourService {
 
         Set<Tour> tours = new HashSet<>(tourRepository.findAll());
         Set<? extends AbstractTourDto> toursDto;
+        Set<Tour> hotTours = tours.stream().filter(tour -> tour.getIsHot().equals(true)).collect(Collectors.toSet());
+        Set<? extends AbstractTourDto> hotToursDto = tourIMapper.setToDto(hotTours, HotTourDto.class);
+        tours.removeAll(hotTours);
+
+
         if(requestRoleDto.isVip()){
             toursDto  = tourIMapper.setToDto(tours, VipPriceTourDto.class);
         } else
-         toursDto = tourIMapper.setToDto(tours, UserPriceTourDto.class);
+        toursDto = tourIMapper.setToDto(tours, UserPriceTourDto.class);
+        toursDto.addAll(hotToursDto);
         return toursDto;
     }
 

@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class VipPriceTourDto extends AbstractTourDto {
+public class HotTourDto extends AbstractTourDto {
 
     @JsonProperty(value = "name")
     private String name;
@@ -21,13 +21,13 @@ public class VipPriceTourDto extends AbstractTourDto {
     private String description;
 
     @JsonProperty (value = "price")
-    private VipPriceDto price;
-
-    @JsonProperty(value = "quantity")
-    private int quantity;
+    private UserPriceDto price;
 
     @JsonProperty(value = "isHot")
     private Boolean isHot;
+
+    @JsonProperty(value = "quantity")
+    private int quantity;
 
     @JsonProperty(value = "categories")
     private Set<TourCategoryDto> categories;
