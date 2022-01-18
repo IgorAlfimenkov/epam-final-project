@@ -21,10 +21,7 @@ public class HotTourDto extends AbstractTourDto {
     private String description;
 
     @JsonProperty (value = "price")
-    private UserPriceDto price;
-
-    @JsonProperty(value = "isHot")
-    private Boolean isHot;
+    private HotPriceDto price;
 
     @JsonProperty(value = "quantity")
     private int quantity;

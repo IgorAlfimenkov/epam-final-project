@@ -17,6 +17,6 @@ public interface ITourService {
     void deleteTour(Long id);
     Set<? extends AbstractTourDto> findToursByPrice(int price,RequestRoleDto requestRoleDto);
     void decrementTourQuantity(Long id);
-    List<? extends AbstractTourDto> findToursOrderedByPrice(Optional<String> sortBy, RequestRoleDto requestRoleDto);
+    List<? extends AbstractTourDto> findToursOrderParam(Optional<String> sortBy, RequestRoleDto requestRoleDto);
     List<? extends AbstractTourDto> orderToursByPrice(RequestRoleDto requestRoleDto);
 }

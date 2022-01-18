@@ -1,5 +1,6 @@
 package com.alfimenkov.finalproject.dto;
 
+
 import lombok.*;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -10,12 +11,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class hotPriceDto {
+public abstract class AbstractTourPrice {
 
-    @JsonProperty(value = "id")
-    private Long id;
-
-    @JsonProperty(value = "hot_price")
-    private Double hot_price;
-
+    @JsonProperty(value = "price")
+    private double price;
 }

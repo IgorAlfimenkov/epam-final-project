@@ -22,14 +22,15 @@ public class TourServiceImpl implements ITourService {
     private final ITourRepository tourRepository;
     private final IMapper<TourDto, Tour> basicTourMapper;
     private final IMapper<? extends VipPriceTourDto, Tour> tourIMapper;
-
+    private final IMapper<HotTourDto, Tour> tourIMapper1;
 
     public AbstractTourDto getTourById(Long id, RequestRoleDto requestRoleDto) {
 
         AbstractTourDto tourDto;
         Tour tour  = tourRepository.findTourById(id);
 
-        if(requestRoleDto.isVip()){
+        if (tour.getIsHot()) return tourIMapper.toDto(tour, HotTourDto.class);
+        else if(requestRoleDto.isVip()){
             tourDto = tourIMapper.toDto(tour, VipPriceTourDto.class);
         } else
             tourDto = tourIMapper.toDto(tour, UserPriceTourDto.class);
@@ -41,16 +42,17 @@ public class TourServiceImpl implements ITourService {
 
         Set<Tour> tours = new HashSet<>(tourRepository.findAll());
         Set<? extends AbstractTourDto> toursDto;
-        Set<Tour> hotTours = tours.stream().filter(tour -> tour.getIsHot().equals(true)).collect(Collectors.toSet());
-        Set<? extends AbstractTourDto> hotToursDto = tourIMapper.setToDto(hotTours, HotTourDto.class);
+        List<Tour> hotTours = tours.stream().filter(tour -> tour.getIsHot().equals(true)).collect(Collectors.toList());
+        List<? extends VipPriceTourDto> hotToursDto = tourIMapper.listToDto(hotTours, HotTourDto.class);
         tours.removeAll(hotTours);
-
 
         if(requestRoleDto.isVip()){
             toursDto  = tourIMapper.setToDto(tours, VipPriceTourDto.class);
         } else
         toursDto = tourIMapper.setToDto(tours, UserPriceTourDto.class);
-        toursDto.addAll(hotToursDto);
+
+        toursDto.addAll((List)hotToursDto);
+
         return toursDto;
     }
 
@@ -80,11 +82,18 @@ public class TourServiceImpl implements ITourService {
     public Set<? extends AbstractTourDto> findToursByPrice(int price, RequestRoleDto requestRoleDto) {
 
         Set<Tour> tours = new HashSet<>(tourRepository.findToursByPrice(price));
+        List<Tour> hotTours = tours.stream().filter(tour -> tour.getIsHot().equals(true)).collect(Collectors.toList());
+        List<? extends VipPriceTourDto> hotToursDto = tourIMapper.listToDto(hotTours, HotTourDto.class);
+        tours.removeAll(hotTours);
         Set<? extends AbstractTourDto> toursDto;
+
         if(requestRoleDto.isVip()){
             toursDto  = tourIMapper.setToDto(tours, VipPriceTourDto.class);
         } else
             toursDto = tourIMapper.setToDto(tours, UserPriceTourDto.class);
+
+        toursDto.addAll((List)hotToursDto);
+
         return toursDto;
 
     }
@@ -99,7 +108,7 @@ public class TourServiceImpl implements ITourService {
 
 
 
-    public List<? extends AbstractTourDto> findToursOrderedByPrice(Optional<String> sortBy,  RequestRoleDto requestRoleDto) {
+    public List<? extends AbstractTourDto> findToursOrderParam(Optional<String> sortBy, RequestRoleDto requestRoleDto) {
 
         List<Tour> tours = tourRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy.orElse("price")));
         List<? extends AbstractTourDto> toursDto;
@@ -108,19 +117,21 @@ public class TourServiceImpl implements ITourService {
             toursDto  = tourIMapper.listToDto(tours, VipPriceTourDto.class);
         } else
             toursDto = tourIMapper.listToDto(tours, UserPriceTourDto.class);
+
         return toursDto;
     }
 
     public List<? extends AbstractTourDto> orderToursByPrice(RequestRoleDto requestRoleDto) {
 
         List<Tour> tours = tourRepository.orderToursByPrice();
-
         List<? extends AbstractTourDto> toursDto;
 
         if(requestRoleDto.isVip()){
             toursDto  = tourIMapper.listToDto(tours, VipPriceTourDto.class);
         } else
             toursDto = tourIMapper.listToDto(tours, UserPriceTourDto.class);
+
+
         return toursDto;
     }
 }

@@ -76,7 +76,7 @@ public class TourController {
                                                                                   @RequestBody RequestRoleDto
                                                                                           requestRoleDto) {
 
-        return ResponseEntity.ok(tourService.findToursOrderedByPrice(sortBy, requestRoleDto));
+        return ResponseEntity.ok(tourService.findToursOrderParam(sortBy, requestRoleDto));
     }
 
     @GetMapping("/order-price")
