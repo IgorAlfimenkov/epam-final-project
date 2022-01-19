@@ -1,7 +1,7 @@
 package com.alfimenkov.finalproject.repo;
 
 import com.alfimenkov.finalproject.config.JpaConfig;
-import com.alfimenkov.finalproject.entity.Price;
+
 import com.alfimenkov.finalproject.entity.Tour;
 import org.junit.Assert;
 import org.junit.Before;
