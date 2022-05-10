@@ -47,6 +47,9 @@ public class Ticket {
     @Column(name = "date")
     private Timestamp date;
 
+    @Column(name = "order_date")
+    private Timestamp orderDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tour_id")
     private Tour tour;

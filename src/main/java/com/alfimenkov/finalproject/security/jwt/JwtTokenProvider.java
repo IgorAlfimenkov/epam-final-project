@@ -2,6 +2,7 @@ package com.alfimenkov.finalproject.security.jwt;
 
 import com.alfimenkov.finalproject.entity.Role;
 import com.alfimenkov.finalproject.exception.JwtAuthenticationException;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -46,12 +47,13 @@ public class JwtTokenProvider {
                 .plusSeconds(7500)
                 .atZone(ZoneId.systemDefault()).toInstant());
 
-        return Jwts.builder()
+        String token =  Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles.stream().map(Role::getName).collect(Collectors.toList()))
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+        return token;
     }
 
     public boolean validateToken(String token) {

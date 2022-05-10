@@ -1,6 +1,7 @@
 package com.alfimenkov.finalproject.controller;
 
 import com.alfimenkov.finalproject.dto.*;
+import com.alfimenkov.finalproject.service.MessageProducerService;
 import com.alfimenkov.finalproject.service.api.IAuthenticationService;
 import com.alfimenkov.finalproject.service.api.ICredentialService;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class AuthenticationController {
 
     private final ICredentialService credentialService;
     private final IAuthenticationService authenticationService;
-
+    private final MessageProducerService messageProducerService;
 
 
     @PostMapping("/auth")
@@ -34,7 +35,10 @@ public class AuthenticationController {
                 new AuthenticationRequestDto()
                         .setUsername(userDto.getUsername())
                         .setPassword(userDto.getPassword());
-
+        messageProducerService.sendUserRegistrationMessage(new UserRegistrationMessageDto()
+                .setEmail(userDto.getEmail())
+                .setName(userDto.getName())
+                .setSurname(userDto.getSurname()));
         return ResponseEntity.ok(authenticationService.login(requestDto));
     }
 }

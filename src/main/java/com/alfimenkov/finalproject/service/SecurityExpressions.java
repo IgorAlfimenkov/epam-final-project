@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @AllArgsConstructor
 @Transactional
@@ -28,6 +30,9 @@ public class SecurityExpressions implements ISecurityExpressions {
 
 
     public boolean isVip(RequestRoleDto requestRoleDto, @NotNull Authentication authentication) {
+
+        requestRoleDto.setVip(false);
+
         boolean isVip = authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_VIP"));
         if(isVip) requestRoleDto.setVip(true);

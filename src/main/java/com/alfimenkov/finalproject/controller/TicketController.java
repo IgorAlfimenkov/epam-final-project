@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class TicketController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto)  {
+    public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto) throws IOException {
 
         tourService.decrementTourQuantity(ticketDto.getTour().getId());
 

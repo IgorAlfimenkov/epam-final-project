@@ -13,6 +13,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class TourCategoryDto {
 
     @JsonProperty(value = "id")
-    private String id;
+    private Long id;
+
+    @JsonProperty(value = "name")
+    private String name;
 
 }

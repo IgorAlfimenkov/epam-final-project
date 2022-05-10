@@ -1,4 +1,4 @@
-package java.com.alfimenkov.finalproject.repo;
+package com.alfimenkov.finalproject.repo;
 
 import com.alfimenkov.finalproject.config.JpaConfig;
 import com.alfimenkov.finalproject.entity.Category;

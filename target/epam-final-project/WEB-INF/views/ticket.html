@@ -5,6 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<p th:text ="${ticket.toString()}"></p>
+<p th:text ="${ticket.getCustomerName()}"></p>
+<p th:text ="${ticket.getCustomerSurname()}"></p>
+<p th:text ="${ticket.getDate}"></p>
 </body>
 </html>

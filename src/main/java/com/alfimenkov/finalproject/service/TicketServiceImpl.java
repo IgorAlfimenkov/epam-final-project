@@ -1,8 +1,8 @@
 package com.alfimenkov.finalproject.service;
 
+import com.alfimenkov.finalproject.dto.SendTicketMessageDto;
 import com.alfimenkov.finalproject.dto.TicketDto;
 import com.alfimenkov.finalproject.entity.Ticket;
-import com.alfimenkov.finalproject.entity.Tour;
 import com.alfimenkov.finalproject.entity.User;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ITicketRepository;
@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
@@ -25,13 +26,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class TicketServiceImpl implements ITicketService {
 
+    private final MessageProducerService messageProducerService;
+    private final ITourRepository tourRepository;
     private final ITicketRepository ticketRepository;
     private final IUserRepository userRepository;
     private final IMapper<TicketDto, Ticket> ticketMapper;
 
     public TicketDto findTicketById(long id){
 
-        Ticket ticket = ticketRepository.findById(id);
+        Ticket ticket = ticketRepository.findTicketById(id);
 
         return ticketMapper.toDto(ticket, TicketDto.class);
     }
@@ -55,25 +58,30 @@ public class TicketServiceImpl implements ITicketService {
 
         User user = userRepository.findUserById(ticketDto.getUser().getId());
         Ticket ticket = ticketMapper.toEntity(ticketDto, Ticket.class);
-
         ticket.setId(null);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        ticket.setDate(timestamp);
+        Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+        ticket.setOrderDate(currentDate);
         user.getTickets().add(ticket);
         ticket.setUser(user);
-
         userRepository.save(user);
         ticketRepository.save(ticket);
-
-        return ticketMapper.toDto(ticket, TicketDto.class);
+        String tourName = tourRepository.getById(ticketDto.getTour().getId()).getName();
+        TicketDto savedTicket = ticketMapper.toDto(ticket, TicketDto.class);
+        messageProducerService.sendUserTicketPdf(new SendTicketMessageDto().setCustomerName(ticket.getCustomerName())
+                .setCustomerSurname(ticket.getCustomerSurname())
+                .setDate(ticket.getDate())
+                .setOrderDate(currentDate)
+                .setTourName(tourName)
+                .setUserName(user.getName()));
+        return savedTicket;
     }
 
     public TicketDto updateTicket(TicketDto ticketDto, Long id) {
 
         Ticket ticket = ticketMapper.toEntity(ticketDto, Ticket.class);
         ticket.setId(id);
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        ticket.setDate(timestamp);
+        Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+        ticket.setDate(currentDate);
         ticketRepository.save(ticket);
 
         return ticketMapper.toDto(ticket, TicketDto.class);

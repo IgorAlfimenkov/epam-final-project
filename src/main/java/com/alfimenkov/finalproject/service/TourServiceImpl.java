@@ -6,6 +6,7 @@ import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ITourRepository;
 import com.alfimenkov.finalproject.service.api.ITourService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,6 @@ public class TourServiceImpl implements ITourService {
     private final ITourRepository tourRepository;
     private final IMapper<TourDto, Tour> basicTourMapper;
     private final IMapper<? extends VipPriceTourDto, Tour> tourIMapper;
-    private final IMapper<HotTourDto, Tour> tourIMapper1;
 
     public AbstractTourDto getTourById(Long id, RequestRoleDto requestRoleDto) {
 

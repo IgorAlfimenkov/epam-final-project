@@ -26,9 +26,6 @@ public class TourDto{
     @JsonProperty(value = "quantity")
     private int quantity;
 
-    @JsonProperty(value = "isHot")
-    private boolean isHot;
-
     @JsonProperty(value = "categories")
     private Set<TourCategoryDto> categories;
 }

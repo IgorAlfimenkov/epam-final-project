@@ -13,7 +13,7 @@ import java.util.Set;
 public interface ITicketRepository extends JpaRepository<Ticket, Long> {
 
     @EntityGraph(value = "ticket-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
-    Ticket findById(long id);
+    Ticket findTicketById(long id);
 
     @EntityGraph(value = "ticket-entity-graph", type = EntityGraph.EntityGraphType.LOAD)
     @Query("select t from Ticket t where t.user.credential.username = ?1")

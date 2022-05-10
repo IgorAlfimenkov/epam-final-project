@@ -1,4 +1,4 @@
-package java.com.alfimenkov.finalproject.repo;
+package com.alfimenkov.finalproject.repo;
 
 import com.alfimenkov.finalproject.config.JpaConfig;
 import com.alfimenkov.finalproject.entity.Ticket;
@@ -54,7 +54,7 @@ public class TicketRepoTest {
 
         ticketRepository.deleteTicketById(expectedResult.getId());
 
-        Ticket actualResult = ticketRepository.findById(expectedResult.getId()).get();
+        Ticket actualResult =  ticketRepository.findTicketById(expectedResult.getId());
         Assert.assertNull(actualResult);
     }
 

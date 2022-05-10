@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,11 +46,11 @@ public class User {
 
     @OneToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    @JoinColumn(name = "creds_id")
+    @JoinColumn(name = "credentials_id")
     private Credential credential;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Ticket> tickets;
+    private List<Ticket> tickets = new ArrayList<Ticket>();
 
 
     @Override

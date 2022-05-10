@@ -23,9 +23,6 @@ public abstract class AbstractTourDto {
     @JsonProperty(value = "quantity")
     private int quantity;
 
-    @JsonProperty(value = "isHot")
-    private Boolean isHot;
-
     @JsonProperty(value = "categories")
     private Set<TourCategoryDto> categories;
 

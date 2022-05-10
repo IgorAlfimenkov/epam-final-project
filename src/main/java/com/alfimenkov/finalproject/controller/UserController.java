@@ -19,8 +19,8 @@ public class UserController {
 
     private final IUserService userServiceImpl;
 
-    @GetMapping("/get/{id}")
     @Secured("ROLE_ADMIN")
+    @GetMapping("/get/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable long id){
 
        return ResponseEntity.ok(userServiceImpl.findUser(id));
