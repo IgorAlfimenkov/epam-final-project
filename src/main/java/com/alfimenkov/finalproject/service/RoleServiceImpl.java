@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -24,7 +26,7 @@ public class RoleServiceImpl implements IRoleService {
     public RoleDto findRoleById(Long id) {
 
         Role role = roleRepository.findRoleById(id);
-
+        if(Objects.isNull(role))throw new EntityNotFoundException("Category with provided id not found.");
         return roleMapper.toDto(role, RoleDto.class);
     }
 

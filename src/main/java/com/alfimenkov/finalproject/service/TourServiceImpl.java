@@ -1,8 +1,11 @@
 package com.alfimenkov.finalproject.service;
 
 import com.alfimenkov.finalproject.dto.*;
+import com.alfimenkov.finalproject.entity.Price;
 import com.alfimenkov.finalproject.entity.Tour;
+import com.alfimenkov.finalproject.exception.NoAvailableTicketsLeftException;
 import com.alfimenkov.finalproject.mapper.IMapper;
+import com.alfimenkov.finalproject.repo.IPriceRepository;
 import com.alfimenkov.finalproject.repo.ITourRepository;
 import com.alfimenkov.finalproject.service.api.ITourService;
 import lombok.AllArgsConstructor;
@@ -10,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,13 +25,16 @@ public class TourServiceImpl implements ITourService {
 
     private final ITourRepository tourRepository;
     private final IMapper<TourDto, Tour> basicTourMapper;
+    private final IMapper<PriceDto, Price> priceIMapper;
     private final IMapper<? extends VipPriceTourDto, Tour> tourIMapper;
+    private final IPriceRepository priceRepository;
     private final IMapper<HotTourDto, Tour> tourIMapper1;
 
     public AbstractTourDto getTourById(Long id, RequestRoleDto requestRoleDto) {
 
         AbstractTourDto tourDto;
         Tour tour  = tourRepository.findTourById(id);
+        if(Objects.isNull(tour)) throw new EntityNotFoundException("Tour not found!");
 
         if (tour.getIsHot()) return tourIMapper.toDto(tour, HotTourDto.class);
         else if(requestRoleDto.isVip()){
@@ -60,17 +67,23 @@ public class TourServiceImpl implements ITourService {
 
         Tour tour = basicTourMapper.toEntity(tourDto, Tour.class);
         tour.setId(null);
+      /*  PriceDto priceDto = tourDto.getPrice();
+        Price price = priceIMapper.toEntity(priceDto, Price.class);
+        price.setId(null);
+        priceRepository.save(price);*/
         tourRepository.save(tour);
-
         return basicTourMapper.toDto(tour, TourDto.class);
     }
 
     public TourDto updateTour(TourDto tourDto, Long id) {
 
         Tour tour = basicTourMapper.toEntity(tourDto, Tour.class);
+        if(Objects.isNull(tour)) throw new EntityNotFoundException("Tour not found!");
         tour.setId(id);
         tourRepository.save(tour);
-
+        PriceDto priceDto = tourDto.getPrice();
+        Price price = priceIMapper.toEntity(priceDto, Price.class);
+        priceRepository.save(price);
         return basicTourMapper.toDto(tour, TourDto.class);
     }
 
@@ -101,8 +114,9 @@ public class TourServiceImpl implements ITourService {
     public void decrementTourQuantity(Long id) {
 
         Tour tour = tourRepository.findTourById(id);
+        if(Objects.isNull(tour)) throw new EntityNotFoundException("Tour with the given id not found.");
+        if (tour.getQuantity() <= 0) throw new NoAvailableTicketsLeftException("There is no tickets left.");
         tour.setQuantity(tour.getQuantity()-1);
-
         tourRepository.save(tour);
     }
 
@@ -130,7 +144,6 @@ public class TourServiceImpl implements ITourService {
             toursDto  = tourIMapper.listToDto(tours, VipPriceTourDto.class);
         } else
             toursDto = tourIMapper.listToDto(tours, UserPriceTourDto.class);
-
 
         return toursDto;
     }

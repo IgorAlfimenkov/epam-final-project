@@ -4,6 +4,7 @@ import com.alfimenkov.finalproject.dto.*;
 import com.alfimenkov.finalproject.entity.Credential;
 import com.alfimenkov.finalproject.entity.Role;
 import com.alfimenkov.finalproject.entity.User;
+import com.alfimenkov.finalproject.exception.UserExistException;
 import com.alfimenkov.finalproject.mapper.IMapper;
 import com.alfimenkov.finalproject.repo.ICredentialRepository;
 import com.alfimenkov.finalproject.repo.IRoleRepository;
@@ -31,6 +32,7 @@ public class CredentialServiceImpl implements ICredentialService {
     public void createCredential(RegisterUserDto registerUserDto) {
 
 
+        if(Objects.nonNull(findCredentialByUsername(registerUserDto.getUsername()))) throw new UserExistException("User with the given username already exist.");
         Credential credential = new Credential();
         User user = new User().setName(registerUserDto.getName())
                         .setSurname(registerUserDto.getSurname())

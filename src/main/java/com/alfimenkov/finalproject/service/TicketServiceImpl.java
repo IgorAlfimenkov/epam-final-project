@@ -14,11 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -32,7 +30,7 @@ public class TicketServiceImpl implements ITicketService {
     public TicketDto findTicketById(long id){
 
         Ticket ticket = ticketRepository.findById(id);
-
+        if(Objects.isNull(ticket)) throw new EntityNotFoundException("Ticket not found!");
         return ticketMapper.toDto(ticket, TicketDto.class);
     }
 
@@ -71,6 +69,7 @@ public class TicketServiceImpl implements ITicketService {
     public TicketDto updateTicket(TicketDto ticketDto, Long id) {
 
         Ticket ticket = ticketMapper.toEntity(ticketDto, Ticket.class);
+        if(Objects.isNull(ticket)) throw new EntityNotFoundException("Ticket not found!");
         ticket.setId(id);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ticket.setDate(timestamp);

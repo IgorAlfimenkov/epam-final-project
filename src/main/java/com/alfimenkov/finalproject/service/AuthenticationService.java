@@ -43,7 +43,7 @@ public class AuthenticationService implements IAuthenticationService {
 
             if (credential == null) {
 
-                throw new UsernameNotFoundException("User with name " + " not found");
+                throw new UsernameNotFoundException("User with name " + requestDto.getUsername() + " not found");
             }
 
             String token = tokenProvider.createToken(username, new ArrayList<>(credential.getRoles()));
@@ -51,7 +51,7 @@ public class AuthenticationService implements IAuthenticationService {
             return new  AuthenticationResponceDto(HttpStatus.OK.value(),username, token);
         }catch (AuthenticationException e) {
 
-            throw new BadCredentialsException("Invalid username or password");
+            throw new BadCredentialsException("Invalid username or password.");
         }
     }
 }

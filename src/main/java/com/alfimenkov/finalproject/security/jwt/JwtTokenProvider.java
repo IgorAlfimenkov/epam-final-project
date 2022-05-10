@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
+    /*@Value("${jwt.secretKey}")*/
+    private String secretKey = "secret";
 
     @Autowired
     private UserDetailsService userDetailsService;

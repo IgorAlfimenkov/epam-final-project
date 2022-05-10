@@ -45,7 +45,7 @@ public class User {
 
     @OneToOne(fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    @JoinColumn(name = "creds_id")
+    @JoinColumn(name = "cred_id")
     private Credential credential;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

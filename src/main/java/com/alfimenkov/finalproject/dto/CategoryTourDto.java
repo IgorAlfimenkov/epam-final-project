@@ -1,6 +1,6 @@
 package com.alfimenkov.finalproject.dto;
 
-import javafx.scene.transform.Scale;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

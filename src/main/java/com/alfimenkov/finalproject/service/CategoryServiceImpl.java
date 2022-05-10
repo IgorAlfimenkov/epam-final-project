@@ -10,7 +10,9 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,13 +27,14 @@ public class CategoryServiceImpl implements ICategoryService {
     public CategoryDto findCategoryById(Long id) {
 
         Category category = categoryRepository.findCategoryById(id);
+        if(Objects.isNull(category)) throw new EntityNotFoundException("Category with provided id not found.");
         return categoryMapper.toDto(category, CategoryDto.class);
     }
 
     public CategoryDto findByName(String name) {
 
         Category category = categoryRepository.findByName(name);
-
+        if(Objects.isNull(category)) throw new EntityNotFoundException("Category with provided name not found.");
         return categoryMapper.toDto(category,CategoryDto.class);
     }
 
@@ -54,6 +57,7 @@ public class CategoryServiceImpl implements ICategoryService {
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
 
         Category category = categoryMapper.toEntity(categoryDto, Category.class);
+        if(Objects.isNull(category)) throw new EntityNotFoundException("Category with provided id not found.");
         category.setId(id);
         categoryRepository.save(category);
 

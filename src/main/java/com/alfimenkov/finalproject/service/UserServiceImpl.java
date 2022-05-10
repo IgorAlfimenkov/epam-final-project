@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,9 +36,9 @@ public class UserServiceImpl implements IUserService {
     public UserDto updateUser(UpdateUserDto updateUserDto, Long id) {
 
         User user = userRepository.findUserById(id);
+        if(Objects.isNull(user)) throw new EntityNotFoundException("User not found!");
         user.setEmail(updateUserDto.getEmail()).setSurname(updateUserDto.getSurname()).setName(updateUserDto.getName());
         userRepository.save(user);
-
         return userMapper.toDto(user, UserDto.class);
     }
 
@@ -47,7 +49,7 @@ public class UserServiceImpl implements IUserService {
 
     public UserDto findUser(Long id){
         User user = userRepository.findUserById(id);
-
+        if(Objects.isNull(user)) throw new EntityNotFoundException("User not found!");
         return userMapper.toDto(user, UserDto.class);
     }
 

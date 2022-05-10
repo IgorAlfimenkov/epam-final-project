@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@Table(name = "creds")
+@Table(name = "credential")
 @NamedEntityGraph(
         name = "credential-graph",
         attributeNodes = {
